@@ -8,7 +8,7 @@ import fs from 'fs';
 export default (async () => ([{
     input: 'server/main.js',
     output: {
-      file: 'cluster.unminified.js',
+      file: './build/cluster.unminified.js',
       format: 'cjs',
       intro: fs.readFileSync('./license.js', {
         encoding: 'utf8'
@@ -27,7 +27,7 @@ export default (async () => ([{
   {
     input: 'server/main.js',
     output: {
-      file: 'cluster.js',
+      file: './node-red-contrib-lyteworx-cluster/cluster.js',
       format: 'cjs',
       intro: fs.readFileSync('./license.js', {
         encoding: 'utf8'

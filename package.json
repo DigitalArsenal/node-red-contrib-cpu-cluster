@@ -1,0 +1,31 @@
+{
+  "name": "node-red-contrib-digitalarsenal-cluster",
+  "version": "0.1.0-alpha.0",
+  "license": "SEE LICENSE IN cluster.js",
+  "description": "",
+  "main": "cluster.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "rollup": "rollup -c rollup.config.js",
+    "build": "npm run rollup"
+  },
+  "node-red": {
+    "nodes": {
+      "cluster": "cluster.js"
+    }
+  },
+  "author": "digitalarsenal.io",
+  "dependencies": {
+    "@ungap/global-this": "^0.3.1",
+    "systeminformation": "git+https://github.com/sebhildebrandt/systeminformation.git",
+    "uuid": "git+https://github.com/kelektiv/node-uuid.git"
+  },
+  "devDependencies": {
+    "rollup": "^1.25.1",
+    "rollup-plugin-commonjs": "^10.1.0",
+    "rollup-plugin-json": "^4.0.0",
+    "rollup-plugin-node-builtins": "^2.1.2",
+    "rollup-plugin-node-resolve": "^5.2.0",
+    "rollup-plugin-terser": "^5.1.2"
+  }
+}

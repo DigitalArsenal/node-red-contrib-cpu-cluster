@@ -1,0 +1,26 @@
+{
+  "msg": {},
+  "node": {
+    "id": "f2e0bd6f.0335",
+    "type": "cluster",
+    "z": "c21f382a.973f18",
+    "_closeCallbacks": [],
+    "_inputCallback": null,
+    "_inputCallbacks": [
+      null,
+      null
+    ],
+    "_asyncDelivery": true,
+    "wires": [
+      []
+    ],
+    "_wireCount": 1,
+    "_wire": "c8015b46.5a0898",
+    "mode": "roundRobin",
+    "bingoOnly": true,
+    "payloadOnly": true,
+    "x": 330,
+    "y": 180
+  },
+  "method": "methodName"
+}

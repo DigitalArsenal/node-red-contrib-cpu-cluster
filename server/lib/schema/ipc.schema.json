@@ -1,0 +1,196 @@
+{
+  "definitions": {},
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "http://example.com/root.json",
+  "type": "object",
+  "title": "The Root Schema",
+  "required": [
+    "msg",
+    "node",
+    "method"
+  ],
+  "properties": {
+    "msg": {
+      "$id": "#/properties/msg",
+      "type": "object",
+      "title": "The Msg Schema"
+    },
+    "node": {
+      "$id": "#/properties/node",
+      "type": "object",
+      "title": "The Node Schema",
+      "required": [
+        "id",
+        "type",
+        "z",
+        "_closeCallbacks",
+        "_inputCallback",
+        "_inputCallbacks",
+        "_asyncDelivery",
+        "wires",
+        "_wireCount",
+        "_wire",
+        "mode",
+        "bingoOnly",
+        "payloadOnly",
+        "x",
+        "y"
+      ],
+      "properties": {
+        "id": {
+          "$id": "#/properties/node/properties/id",
+          "type": "string",
+          "title": "The Id Schema",
+          "default": "",
+          "examples": [
+            "f2e0bd6f.0335"
+          ],
+          "pattern": "^(.*)$"
+        },
+        "type": {
+          "$id": "#/properties/node/properties/type",
+          "type": "string",
+          "title": "The Type Schema",
+          "default": "",
+          "examples": [
+            "cluster"
+          ],
+          "pattern": "^(.*)$"
+        },
+        "z": {
+          "$id": "#/properties/node/properties/z",
+          "type": "string",
+          "title": "The Z Schema",
+          "default": "",
+          "examples": [
+            "c21f382a.973f18"
+          ],
+          "pattern": "^(.*)$"
+        },
+        "_closeCallbacks": {
+          "$id": "#/properties/node/properties/_closeCallbacks",
+          "type": "array",
+          "title": "The _closecallbacks Schema"
+        },
+        "_inputCallback": {
+          "$id": "#/properties/node/properties/_inputCallback",
+          "type": "null",
+          "title": "The _inputcallback Schema",
+          "default": null,
+          "examples": [
+            null
+          ]
+        },
+        "_inputCallbacks": {
+          "$id": "#/properties/node/properties/_inputCallbacks",
+          "type": "array",
+          "title": "The _inputcallbacks Schema",
+          "items": {
+            "$id": "#/properties/node/properties/_inputCallbacks/items",
+            "type": "null",
+            "title": "The Items Schema",
+            "default": null,
+            "examples": [
+              null,
+              null
+            ]
+          }
+        },
+        "_asyncDelivery": {
+          "$id": "#/properties/node/properties/_asyncDelivery",
+          "type": "boolean",
+          "title": "The _asyncdelivery Schema",
+          "default": false,
+          "examples": [
+            true
+          ]
+        },
+        "wires": {
+          "$id": "#/properties/node/properties/wires",
+          "type": "array",
+          "title": "The Wires Schema",
+          "items": {
+            "$id": "#/properties/node/properties/wires/items",
+            "type": "array",
+            "title": "The Items Schema"
+          }
+        },
+        "_wireCount": {
+          "$id": "#/properties/node/properties/_wireCount",
+          "type": "integer",
+          "title": "The _wirecount Schema",
+          "default": 0,
+          "examples": [
+            1
+          ]
+        },
+        "_wire": {
+          "$id": "#/properties/node/properties/_wire",
+          "type": "string",
+          "title": "The _wire Schema",
+          "default": "",
+          "examples": [
+            "c8015b46.5a0898"
+          ],
+          "pattern": "^(.*)$"
+        },
+        "mode": {
+          "$id": "#/properties/node/properties/mode",
+          "type": "string",
+          "title": "The Mode Schema",
+          "default": "",
+          "examples": [
+            "roundRobin"
+          ],
+          "pattern": "^(.*)$"
+        },
+        "bingoOnly": {
+          "$id": "#/properties/node/properties/bingoOnly",
+          "type": "boolean",
+          "title": "The Bingoonly Schema",
+          "default": false,
+          "examples": [
+            true
+          ]
+        },
+        "payloadOnly": {
+          "$id": "#/properties/node/properties/payloadOnly",
+          "type": "boolean",
+          "title": "The Payloadonly Schema",
+          "default": false,
+          "examples": [
+            true
+          ]
+        },
+        "x": {
+          "$id": "#/properties/node/properties/x",
+          "type": "integer",
+          "title": "The X Schema",
+          "default": 0,
+          "examples": [
+            330
+          ]
+        },
+        "y": {
+          "$id": "#/properties/node/properties/y",
+          "type": "integer",
+          "title": "The Y Schema",
+          "default": 0,
+          "examples": [
+            180
+          ]
+        }
+      }
+    },
+    "method": {
+      "$id": "#/properties/method",
+      "type": "string",
+      "title": "The Method Schema",
+      "default": "",
+      "examples": [
+        "methodName"
+      ],
+      "pattern": "^(.*)$"
+    }
+  }
+}

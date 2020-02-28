@@ -1,0 +1,3 @@
+[submodule "node-red-contrib-lyteworx-cluster"]
+	path = node-red-contrib-lyteworx-cluster
+	url = git@github.com:Lyteworx/node-red-contrib-lyteworx-cluster.git

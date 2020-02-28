@@ -5,6 +5,8 @@
   "description": "",
   "main": "cluster.js",
   "scripts": {
+    "dev": "concurrently \"./node_modules/.bin/nodemon --exec node-red -e js,html -w ./node-red-contrib-lyteworx-cluster\" \"./node_modules/.bin/nodemon --exec npm run rollup -w ./server -w ./client -e js,css,html,cjs,mjs\"  \"./node_modules/.bin/nodemon --exec cp client/* node-red-contrib-lyteworx-cluster -w ./client \"",
+    "install": "git submodule init && git submodule update",
     "test": "echo \"Error: no test specified\" && exit 1",
     "rollup": "rollup -c rollup.config.js",
     "build": "npm run rollup"
@@ -17,11 +19,12 @@
   "author": "digitalarsenal.io",
   "dependencies": {
     "@ungap/global-this": "^0.3.1",
-    "systeminformation": "git+https://github.com/sebhildebrandt/systeminformation.git",
-    "uuid": "git+https://github.com/kelektiv/node-uuid.git"
+    "systeminformation": "git+https://github.com/sebhildebrandt/systeminformation.git"
   },
   "devDependencies": {
     "bl": "^4.0.0",
+    "concurrently": "^5.1.0",
+    "nodemon": "^2.0.2",
     "rollup": "^1.25.1",
     "rollup-plugin-commonjs": "^10.1.0",
     "rollup-plugin-json": "^4.0.0",

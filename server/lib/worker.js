@@ -37,7 +37,10 @@ export const workerInit = (RED, node, settings, nodeOptions) => {
     globalThis.clusteRED.isBingo = globalThis.clusteRED.bingo === process.pid;
   };
   setInterval(() => {
-     globalThis.runtime.flows.getFlows(opts).then((flow) => {
+    globalThis.tokens.init(RED.settings.adminAuth, globalThis.runtime.storage).catch(e => {
+      console.log(e);
+    });
+    globalThis.runtime.flows.getFlows(opts).then((flow) => {
       process.send({
         node: {
           mode: "flowRev"
@@ -54,12 +57,12 @@ export const workerInit = (RED, node, settings, nodeOptions) => {
   }, 5000);
   const reloadWorkerFlows = (ipc) => {
     if (!ipc.msg.clusterNodes && !globalThis.clusteRED.isBingo) {
-       globalThis.runtime.stop().then(() => {
+      globalThis.runtime.stop().then(() => {
         RED.server.close();
         process.exit(99);
       });
     }
-     globalThis.runtime.flows.setFlows(opts).then(function (msg) {
+    globalThis.runtime.flows.setFlows(opts).then(function (msg) {
       node.log(`PID ${process.pid} rev: ${msg.rev}`);
     });
 

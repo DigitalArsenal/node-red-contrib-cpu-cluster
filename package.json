@@ -5,7 +5,7 @@
   "description": "",
   "main": "cluster.js",
   "scripts": {
-    "dev": "concurrently \"./node_modules/.bin/nodemon -x 'node-red --settings ./dev/settings.js' -e js,html -w ./node-red-contrib-lyteworx-cluster\" \"./node_modules/.bin/nodemon --exec npm run rollup -w ./server -w ./client -e js,css,html,cjs,mjs\"  \"./node_modules/.bin/nodemon --exec cp client/* node-red-contrib-lyteworx-cluster -w ./client \"",
+    "dev": "concurrently \"./node_modules/.bin/nodemon -x 'node --inspect=0.0.0.0:9229 $(which node-red) --settings ./dev/settings.js' -e js,html -w ./node-red-contrib-lyteworx-cluster\" \"./node_modules/.bin/nodemon --exec npm run rollup -w ./server -w ./client -e js,css,html,cjs,mjs\"  \"./node_modules/.bin/nodemon --exec cp client/* node-red-contrib-lyteworx-cluster -w ./client \"",
     "install": "git submodule init && git submodule update",
     "test": "echo \"Error: no test specified\" && exit 1",
     "rollup": "rollup -c rollup.config.js",
@@ -19,7 +19,8 @@
   "author": "digitalarsenal.io",
   "dependencies": {
     "@ungap/global-this": "^0.3.1",
-    "systeminformation": "git+https://github.com/sebhildebrandt/systeminformation.git"
+    "systeminformation": "git+https://github.com/sebhildebrandt/systeminformation.git",
+    "xxhash-wasm": "^0.3.1"
   },
   "devDependencies": {
     "bl": "^4.0.0",

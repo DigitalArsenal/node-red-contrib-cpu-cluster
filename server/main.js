@@ -19,12 +19,15 @@ import globalThis from '@ungap/global-this';
 globalThis.CONSTANTS = {
   BINGO: 'bf4cef5d-25d9-4356-9193-c514d15ad818'
 };
+
 for (let pp in require.cache) {
+  if (pp.indexOf('lib/auth/tokens.js') > -1) {
+    globalThis.tokens = require(pp);
+  }
   if (pp.indexOf('runtime/lib/index.js') > -1) {
     globalThis.runtime = require(pp);
   }
 }
-
 
 export default function (RED) {
 

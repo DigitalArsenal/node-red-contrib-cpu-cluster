@@ -4,6 +4,7 @@ import broadcast from './strategies/broadcast';
 import roundRobin from './strategies/roundRobin';
 import randomWorker from './strategies/randomWorker';
 import sendToBingo from './strategies/sendToBingo';
+import console from 'console';
 
 let _RED;
 
@@ -21,9 +22,6 @@ let currentRev = null;
 
 const flowRev = (ipc, _worker) => {
   let workers = [];
-  if (!currentRev) {
-    currentRev = ipc.msg.rev;
-  }
   if (currentRev !== ipc.msg.rev) {
     currentRev = ipc.msg.rev;
     workers = broadcast();
@@ -126,7 +124,7 @@ export const masterInit = (RED, app, settings, server) => {
     redWorker.on('error', (_e) => {
       try {
         console.log(`IPC error ${_e}`);
-      } catch (e) {}
+      } catch (e) { }
     });
     return redWorker;
   };

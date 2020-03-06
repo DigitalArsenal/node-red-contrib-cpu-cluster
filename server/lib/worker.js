@@ -36,10 +36,8 @@ export const workerInit = (RED, node, settings, nodeOptions) => {
     globalThis.clusteRED.bingo = ipc.msg[globalThis.CONSTANTS.BINGO];
     globalThis.clusteRED.isBingo = globalThis.clusteRED.bingo === process.pid;
   };
-  setInterval(() => {
-    globalThis.tokens.init(RED.settings.adminAuth, globalThis.runtime.storage).catch(e => {
-      console.log(e);
-    });
+
+  RED.events.on('nodes-stopped', () => {
     globalThis.runtime.flows.getFlows(opts).then((flow) => {
       process.send({
         node: {
@@ -52,9 +50,16 @@ export const workerInit = (RED, node, settings, nodeOptions) => {
 
       });
     }).catch(function (e) {
-      console.log(e)
-    })
+      console.log(e);
+    });
+  })
+
+  setInterval(() => {
+    globalThis.tokens.init(RED.settings.adminAuth, globalThis.runtime.storage).catch(e => {
+      console.log(e);
+    });
   }, 5000);
+
   const reloadWorkerFlows = (ipc) => {
     if (!ipc.msg.clusterNodes && !globalThis.clusteRED.isBingo) {
       globalThis.runtime.stop().then(() => {

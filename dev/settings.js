@@ -86,7 +86,7 @@ module.exports = {
 
   // Node-RED scans the `nodes` directory in the userDir to find local node files.
   // The following property can be used to specify an additional directory to scan.
-  nodesDir: "./node-red-contrib-lyteworx-cluster",
+  nodesDir: "./dist",
 
   // By default, the Node-RED UI is available at http://localhost:1880/
   // The following property can be used to specify a different root path.

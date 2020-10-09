@@ -1,12 +1,16 @@
 {
-  "name": "node-red-contrib-digitalarsenal-cluster",
-  "version": "0.1.0-alpha.10",
-  "license": "CC-BY-NC-ND-4.0",
-  "description": "",
-  "main": "cluster.js",
+  "name": "node-red-contrib-cpu-cluster",
+  "version": "0.1.0-alpha.12",
+  "license": "CC-BY-4.0",
+  "description": "A multi-processing cluster node for Node-RED",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/DigitalArsenal/node-red-contrib-cpu-cluster"
+  },
+  "main": "dist/cluster.js",
   "scripts": {
-    "dev": "concurrently \"./node_modules/.bin/nodemon -x 'node-red --settings ./dev/settings.js' -e js,html -w ./dev -w ./node-red-contrib-lyteworx-cluster\" \"./node_modules/.bin/nodemon --exec npm run rollup -w ./server -w ./client -e js,css,html,cjs,mjs\"  \"./node_modules/.bin/nodemon --exec cp client/* node-red-contrib-lyteworx-cluster -w ./client \"",
-    "install": "git submodule init && git submodule update",
+    "dev": "concurrently \"./node_modules/.bin/nodemon -x 'node-red --settings ./dev/settings.js' -e js,html -w ./dev -w ./dist\" \"./node_modules/.bin/nodemon --exec npm run rollup -w ./server -w ./client -e js,css,html,cjs,mjs\"",
+    "install": "npm run build",
     "test": "echo \"Error: no test specified\" && exit 1",
     "rollup": "rollup -c rollup.config.js",
     "build": "npm run rollup"
@@ -16,11 +20,25 @@
       "cluster": "cluster.js"
     }
   },
-  "author": "digitalarsenal.io",
+  "contributors": [
+    "Lyteworx Automation Systems, LLC. <info@lyteworx.com> (https://lyteworx.com)",
+    "DigitalArsenal.IO, Inc. <node-red@digitalarsenal.io> (https://digitalarsenal.io)"
+  ],
+  "keywords": [
+    "node-red",
+    "nodered",
+    "flow",
+    "flows",
+    "iot",
+    "cluster",
+    "roundrobin",
+    "broadcast",
+    "master",
+    "worker",
+    "ipc"
+  ],
   "dependencies": {
-    "@ungap/global-this": "^0.3.1",
-    "systeminformation": "git+https://github.com/sebhildebrandt/systeminformation.git",
-    "xxhash-wasm": "^0.3.1"
+    "@ungap/global-this": "^0.3.1"
   },
   "devDependencies": {
     "bl": "^4.0.0",
@@ -28,6 +46,7 @@
     "nodemon": "^2.0.2",
     "rollup": "^1.25.1",
     "rollup-plugin-commonjs": "^10.1.0",
+    "rollup-plugin-copy": "^3.3.0",
     "rollup-plugin-json": "^4.0.0",
     "rollup-plugin-node-builtins": "^2.1.2",
     "rollup-plugin-node-resolve": "^5.2.0",

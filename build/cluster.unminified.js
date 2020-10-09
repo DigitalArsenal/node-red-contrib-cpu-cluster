@@ -12,15 +12,30 @@ var cluster = _interopDefault(require('cluster'));
 var EventEmitter = _interopDefault(require('events'));
 
 const getEligibleWorkers = (nodeID) => {
-  let _r = Object
-    .keys(cluster.workers).map(m => {
-      return cluster.workers[m]
-    });
+  let _r = Object.keys(cluster.workers).map((m) => {
+    return cluster.workers[m];
+  });
   if (nodeID) {
-    _r = _r.filter(w => w.nodeREDCOMM[nodeID]);
+    _r = _r.filter((w) => w.nodeREDCOMM[nodeID]);
   }
   return _r;
 };
+
+function noop() {}
+
+const console$1 = global.console
+  ? global.console
+  : {
+      log: noop,
+      info: noop,
+      warn: noop,
+      error: noop,
+      dir: noop,
+      assert: noop,
+      time: noop,
+      timeEnd: noop,
+      trace: noop,
+    };
 
 function randomWorker (ipc) {
     let _available = getEligibleWorkers(); //TODO
@@ -85,20 +100,6 @@ function sendToBingo () {
   return [globalThis.clusteRED.bingo];
 }
 
-function noop(){}
-
-var console$1 = global.console ? global.console : {
-  log: noop,
-  info: noop,
-  warn: noop,
-  error: noop,
-  dir: noop,
-  assert: noop,
-  time: noop,
-  timeEnd: noop,
-  trace: noop
-};
-
 let _RED;
 
 const clusterized = (ipc, _worker) => {
@@ -119,10 +120,10 @@ const flowRev = (ipc, _worker) => {
     currentRev = ipc.msg.rev;
     workers = broadcast();
     workers.ipc = {
-      method: 'reloadWorkerFlows',
+      method: "reloadWorkerFlows",
       msg: {
-        ...ipc.msg
-      }
+        ...ipc.msg,
+      },
     };
   }
   return workers;
@@ -131,13 +132,12 @@ const flowRev = (ipc, _worker) => {
 const loadClusterWorkerFlows = function (ipc, _worker) {
   let workers = broadcast(_worker);
   workers.ipc = {
-    method: 'reloadWorkerFlows'
+    method: "reloadWorkerFlows",
   };
   return workers;
 };
 
 const masterInit = (RED, app, settings, server) => {
-
   _RED = RED;
 
   globalThis.clusteRED = {
@@ -149,24 +149,24 @@ const masterInit = (RED, app, settings, server) => {
       clusterized,
       loadClusterWorkerFlows,
       randomWorker,
-      sendToBingo
+      sendToBingo,
     },
     strategies: {
       randomWorker,
       sendToBingo,
       broadcast,
-      roundRobin: roundRobin$1
+      roundRobin: roundRobin$1,
     },
     initialized: false,
     bingo: undefined,
     isBingo: false,
     redHalted: false,
-    clusterizedWorkers: {}
+    clusterizedWorkers: {},
   };
 
   /**
    * Route a message from a worker to the correct location.
-   * 
+   *
    * @param {Object} ipc - The serialized ipc message
    * @param {string} ipc.node - Node-RED node sending the message
    * @param {string} ipc.msg - Message to send
@@ -175,7 +175,8 @@ const masterInit = (RED, app, settings, server) => {
 
   const router = function (ipc, worker) {
     const f = globalThis.clusteRED.methods[ipc.node.mode];
-    const func = typeof f === 'function' ? f : globalThis.clusteRED.methods['broadcast'];
+    const func =
+      typeof f === "function" ? f : globalThis.clusteRED.methods["broadcast"];
     let workers = func(ipc, worker);
     if (!workers) return null;
     if (ipc && ipc.node && workers) {
@@ -187,18 +188,21 @@ const masterInit = (RED, app, settings, server) => {
         if (workers[i] && workers[i].isConnected()) {
           workers[i].send({
             method: ipc.method,
-            msg: ipc.msg
+            msg: ipc.msg,
           });
         }
       }
     }
   };
 
-  let cpus = settings.cluster && parseInt(settings.cluster.cpus) ? settings.cluster.cpus : require('os').cpus().length;
+  let cpus =
+    settings.cluster && parseInt(settings.cluster.cpus)
+      ? settings.cluster.cpus
+      : require("os").cpus().length;
 
   /**
    * Fork a new worker
-   * 
+   *
    * @param {Object} [deadWorker] - The terminated worker that kicked off the fork
    **/
 
@@ -206,24 +210,25 @@ const masterInit = (RED, app, settings, server) => {
     if (Object.keys(cluster.workers).length >= cpus) return;
     for (let i = 0; i < len; i++) {
       let cp = _fork();
-    }  };
+    }
+  };
 
   let _fork = function (deadWorker) {
     let redWorker = cluster.fork();
-    redWorker.on('message', (ipc) => {
+    redWorker.on("message", (ipc) => {
       router(ipc, redWorker);
     });
-    redWorker.on('error', (_e) => {
+    redWorker.on("error", (_e) => {
       try {
         console$1.log(`IPC error ${_e}`);
-      } catch (e) { }
+      } catch (e) {}
     });
     return redWorker;
   };
 
   forkFunc(cpus);
 
-  cluster.on('exit', function (worker, code, signal) {
+  cluster.on("exit", function (worker, code, signal) {
     if (code !== 99) {
       _fork();
     }
@@ -231,32 +236,29 @@ const masterInit = (RED, app, settings, server) => {
 };
 
 let startup = () => {
-
   process.send({
     node: {
-      mode: 'clusterized'
-    }
+      mode: "clusterized",
+    },
   });
   process.send({
     node: {
-      mode: 'getBingo'
-    }
+      mode: "getBingo",
+    },
   });
-
 };
 
 let opts = {
   user: undefined,
-  deploymentType: 'reload',
+  deploymentType: "reload",
   req: {
     user: undefined,
-    path: '/flows',
-    ip: '127.0.0.1'
-  }
+    path: "/flows",
+    ip: "127.0.0.1",
+  },
 };
 
 const workerInit = (RED, node, settings, nodeOptions) => {
-
   startup();
 
   Object.assign(node, nodeOptions);
@@ -267,27 +269,33 @@ const workerInit = (RED, node, settings, nodeOptions) => {
     globalThis.clusteRED.isBingo = globalThis.clusteRED.bingo === process.pid;
   };
 
-  RED.events.on('nodes-stopped', () => {
-    globalThis.runtime.flows.getFlows(opts).then((flow) => {
-      process.send({
-        node: {
-          mode: "flowRev"
-        },
-        msg: {
-          rev: flow.rev,
-          clusterNodes: flow.flows.filter(n => n.type === "cluster").length
-        }
-
+  RED.events.on("nodes-stopped", () => {
+    globalThis.runtime.flows
+      .getFlows(opts)
+      .then((flow) => {
+        process.send({
+          node: {
+            mode: "flowRev",
+          },
+          msg: {
+            rev: flow.rev,
+            clusterNodes: flow.flows.filter((n) => n.type === "cluster").length,
+          },
+        });
+      })
+      .catch(function (e) {
+        console.log(e);
       });
-    }).catch(function (e) {
-      console.log(e);
-    });
   });
 
   setInterval(() => {
-    globalThis.tokens.init(RED.settings.adminAuth, globalThis.runtime.storage).catch(e => {
-      console.log(e);
-    });
+    if (RED.settings.adminAuth) {
+      globalThis.tokens
+        .init(RED.settings.adminAuth, globalThis.runtime.storage)
+        .catch((e) => {
+          console.log(e);
+        });
+    }
   }, 5000);
 
   const reloadWorkerFlows = (ipc) => {
@@ -300,17 +308,16 @@ const workerInit = (RED, node, settings, nodeOptions) => {
     globalThis.runtime.flows.setFlows(opts).then(function (msg) {
       node.log(`PID ${process.pid} rev: ${msg.rev}`);
     });
-
   };
 
   const runOnBingo = () => {
-    return node.mode !== 'runOnBingo' || globalThis.clusteRED.isBingo;
+    return node.mode !== "runOnBingo" || globalThis.clusteRED.isBingo;
   };
 
   globalThis.clusteRED = {
     methods: {
       setBingo,
-      reloadWorkerFlows
+      reloadWorkerFlows,
     },
     initialized: false,
     bingo: undefined,
@@ -319,17 +326,19 @@ const workerInit = (RED, node, settings, nodeOptions) => {
     nodeREDEvents: new EventEmitter(),
     masterMethods: [],
     workerMethods: {
-      runOnBingo
-    }
+      runOnBingo,
+    },
   };
 
   node._inputCallback = function (msg) {
     if (runOnBingo()) {
       process.send({
         node,
-        msg: node.payloadOnly ? {
-          payload: msg.payload
-        } : msg,
+        msg: node.payloadOnly
+          ? {
+              payload: msg.payload,
+            }
+          : msg,
       });
     }
   };
@@ -337,7 +346,7 @@ const workerInit = (RED, node, settings, nodeOptions) => {
   let _send = node.send;
 
   node.send = function (msg) {
-    if ((msg && msg.fromMaster) && runOnBingo()) {
+    if (msg && msg.fromMaster && runOnBingo()) {
       delete msg.fromMaster;
       _send.call(node, msg);
     }
@@ -353,22 +362,26 @@ const workerInit = (RED, node, settings, nodeOptions) => {
     }
   };
 
-  process.on('message', ipcCallback);
+  process.on("message", ipcCallback);
 
-  let serverID = '6660d4cd-cc89-4f2a-a20b-1ff66353d26b';
+  let serverID = "6660d4cd-cc89-4f2a-a20b-1ff66353d26b";
 
   RED.httpAdmin.get(`/${serverID}`, function (req, res) {
-    res.send(globalThis.clusteRED.masterMethods.concat(Object.keys(globalThis.clusteRED.workerMethods)));
+    res.send(
+      globalThis.clusteRED.masterMethods.concat(
+        Object.keys(globalThis.clusteRED.workerMethods)
+      )
+    );
   });
 
-  node.on('close', function () {
+  node.on("close", function () {
+    process.removeListener("message", ipcCallback);
 
-    process.removeListener('message', ipcCallback);
-
-    RED.httpAdmin._router.stack = RED.httpAdmin._router.stack.filter((route, i, routes) => {
-      return route.regexp.toString().indexOf(serverID) === -1
-    });
-
+    RED.httpAdmin._router.stack = RED.httpAdmin._router.stack.filter(
+      (route, i, routes) => {
+        return route.regexp.toString().indexOf(serverID) === -1;
+      }
+    );
   });
 };
 

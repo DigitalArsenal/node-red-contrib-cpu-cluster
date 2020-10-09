@@ -1,11 +1,10 @@
-import cluster from 'cluster';
-import getBingo from './strategies/getBingo';
-import broadcast from './strategies/broadcast';
-import roundRobin from './strategies/roundRobin';
-import randomWorker from './strategies/randomWorker';
-import sendToBingo from './strategies/sendToBingo';
-import console from 'console';
-
+import cluster from "cluster";
+import getBingo from "./strategies/getBingo";
+import broadcast from "./strategies/broadcast";
+import roundRobin from "./strategies/roundRobin";
+import randomWorker from "./strategies/randomWorker";
+import sendToBingo from "./strategies/sendToBingo";
+import { console } from "./utilities/utilities";
 let _RED;
 
 const clusterized = (ipc, _worker) => {
@@ -26,25 +25,24 @@ const flowRev = (ipc, _worker) => {
     currentRev = ipc.msg.rev;
     workers = broadcast();
     workers.ipc = {
-      method: 'reloadWorkerFlows',
+      method: "reloadWorkerFlows",
       msg: {
-        ...ipc.msg
-      }
+        ...ipc.msg,
+      },
     };
   }
   return workers;
-}
+};
 
 const loadClusterWorkerFlows = function (ipc, _worker) {
   let workers = broadcast(_worker);
   workers.ipc = {
-    method: 'reloadWorkerFlows'
+    method: "reloadWorkerFlows",
   };
   return workers;
 };
 
 export const masterInit = (RED, app, settings, server) => {
-
   _RED = RED;
 
   globalThis.clusteRED = {
@@ -56,24 +54,24 @@ export const masterInit = (RED, app, settings, server) => {
       clusterized,
       loadClusterWorkerFlows,
       randomWorker,
-      sendToBingo
+      sendToBingo,
     },
     strategies: {
       randomWorker,
       sendToBingo,
       broadcast,
-      roundRobin
+      roundRobin,
     },
     initialized: false,
     bingo: undefined,
     isBingo: false,
     redHalted: false,
-    clusterizedWorkers: {}
+    clusterizedWorkers: {},
   };
 
   /**
    * Route a message from a worker to the correct location.
-   * 
+   *
    * @param {Object} ipc - The serialized ipc message
    * @param {string} ipc.node - Node-RED node sending the message
    * @param {string} ipc.msg - Message to send
@@ -82,7 +80,8 @@ export const masterInit = (RED, app, settings, server) => {
 
   const router = function (ipc, worker) {
     const f = globalThis.clusteRED.methods[ipc.node.mode];
-    const func = typeof f === 'function' ? f : globalThis.clusteRED.methods['broadcast'];
+    const func =
+      typeof f === "function" ? f : globalThis.clusteRED.methods["broadcast"];
     let workers = func(ipc, worker);
     if (!workers) return null;
     if (ipc && ipc.node && workers) {
@@ -94,18 +93,21 @@ export const masterInit = (RED, app, settings, server) => {
         if (workers[i] && workers[i].isConnected()) {
           workers[i].send({
             method: ipc.method,
-            msg: ipc.msg
+            msg: ipc.msg,
           });
         }
       }
     }
   };
 
-  let cpus = settings.cluster && parseInt(settings.cluster.cpus) ? settings.cluster.cpus : require('os').cpus().length;
+  let cpus =
+    settings.cluster && parseInt(settings.cluster.cpus)
+      ? settings.cluster.cpus
+      : require("os").cpus().length;
 
   /**
    * Fork a new worker
-   * 
+   *
    * @param {Object} [deadWorker] - The terminated worker that kicked off the fork
    **/
 
@@ -113,25 +115,25 @@ export const masterInit = (RED, app, settings, server) => {
     if (Object.keys(cluster.workers).length >= cpus) return;
     for (let i = 0; i < len; i++) {
       let cp = _fork();
-    };
-  }
+    }
+  };
 
   let _fork = function (deadWorker) {
     let redWorker = cluster.fork();
-    redWorker.on('message', (ipc) => {
+    redWorker.on("message", (ipc) => {
       router(ipc, redWorker);
     });
-    redWorker.on('error', (_e) => {
+    redWorker.on("error", (_e) => {
       try {
         console.log(`IPC error ${_e}`);
-      } catch (e) { }
+      } catch (e) {}
     });
     return redWorker;
   };
 
   forkFunc(cpus);
 
-  cluster.on('exit', function (worker, code, signal) {
+  cluster.on("exit", function (worker, code, signal) {
     if (code !== 99) {
       _fork(worker);
     }

@@ -125,10 +125,11 @@ module.exports = {
     users: [
       {
         username: "admin",
-        password: "$2a$08$zZWtXTja0fB1pzD4sHCMyOCMYz2Z6dNbM6tl8sJogENOMcxWV9DN.",
-        permissions: "*"
-      }
-    ]
+        password:
+          "$2a$08$zZWtXTja0fB1pzD4sHCMyOCMYz2Z6dNbM6tl8sJogENOMcxWV9DN.",
+        permissions: "*",
+      },
+    ],
   },
 
   // To password protect the node-defined HTTP endpoints (httpNodeRoot), or
@@ -148,7 +149,7 @@ module.exports = {
   //    key: fs.readFileSync('privatekey.pem'),
   //    cert: fs.readFileSync('certificate.pem')
   //},
-  storageModule: {},
+  //storageModule: {},
   // The following property can be used to cause insecure HTTP connections to
   // be redirected to HTTPS.
   //requireHttps: true,
@@ -216,7 +217,7 @@ module.exports = {
   // can be accessed in a function block as:
   //    global.get("os")
   functionGlobalContext: {
-    process: require("process")
+    process: require("process"),
     // os:require('os'),
     // jfive:require("johnny-five"),
     // j5board:require("johnny-five").Board({repl:false})
@@ -263,18 +264,18 @@ module.exports = {
       // Whether or not to include metric events in the log output
       metrics: false,
       // Whether or not to include audit events in the log output
-      audit: false
-    }
+      audit: false,
+    },
   },
 
   // Customising the editor
   editorTheme: {
     projects: {
       // To enable the Projects feature, set this value to true
-      enabled: false
-    }
+      enabled: false,
+    },
   } /*,
     cluster: {
         cpus: 2
-    }*/
+    }*/,
 };

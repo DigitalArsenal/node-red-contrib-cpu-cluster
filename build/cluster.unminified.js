@@ -270,7 +270,7 @@ const workerInit = (RED, node, settings, nodeOptions) => {
     globalThis.clusteRED.isBingo = globalThis.clusteRED.bingo === process.pid;
   };
 
-  RED.events.on("nodes-stopped", () => {
+  RED.events.on("flows:stopped", () => {
     globalThis.runtime.flows
       .getFlows(opts)
       .then((flow) => {

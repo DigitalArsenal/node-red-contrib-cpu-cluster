@@ -1,6 +1,6 @@
 {
   "name": "node-red-contrib-cpu-cluster",
-  "version": "0.1.0-alpha.12",
+  "version": "0.1.0-beta.11",
   "license": "CC-BY-4.0",
   "description": "A multi-processing cluster node for Node-RED",
   "repository": {
@@ -10,7 +10,6 @@
   "main": "dist/cluster.js",
   "scripts": {
     "dev": "concurrently \"./node_modules/.bin/nodemon -x 'node-red --settings ./dev/settings.js' -e js,html -w ./dev -w ./dist\" \"./node_modules/.bin/nodemon --exec npm run rollup -w ./server -w ./client -e js,css,html,cjs,mjs\"",
-    "install": "rm dist/* && npm run build",
     "test": "echo \"Error: no test specified\" && exit 1",
     "rollup": "rollup -c rollup.config.js",
     "build": "npm run rollup"

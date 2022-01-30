@@ -1,4 +1,4 @@
-# node-red-contrib-lyteworx-cluster
+# node-red-contrib-cpu-cluster
 
 ## Run Node-RED on all your CPU cores
 
@@ -10,15 +10,13 @@ Most computers, from the smartphone to the enterprise server, have multiple core
 
 ## License
 
-This node is licensed under the [Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International License](https://creativecommons.org/licenses/by-nc-nd/4.0/).
-
-For commercial use, please contact info@lyteworx.com
+[Apache 2.0](https://www.apache.org/licenses/LICENSE-2.0.html)
 
 ## Getting Started
 
 ## Installing
 
-`npm i node-red-contrib-lyteworx-cluster`
+`npm i node-red-contrib-cpu-cluster`
 
 
 ## Overview
@@ -42,7 +40,6 @@ If all nodes are removed from the active flow, all clustering logic will also be
 ## Runtime Modes
 
 1. **Enable Clustering** - The default mode, which enables clustering (running all flows on all processes)
-
 2. **Send to Random Worker** - Takes a message from the input and sends it to a random worker process. 
 3. **Run On Bingo Process** - Only passes the message to the output **if the current worker is the bingo worker**.  Does not allow the message to continue to if the worker is not the bingo worker.
 4. **Send To Bingo Process** - Takes a message from the input and sends it to the bingo worker.
